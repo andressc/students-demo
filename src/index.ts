@@ -1,35 +1,47 @@
-import express, {Request, Response} from 'express'
-const app = express()
-const port = process.env.PORT || 3000
+import express, {NextFunction, Request, Response} from 'express';
+import bodyParser from 'body-parser';
+import {productsRouter} from "./routes/products-router";
 
-const videos = [
-    {id: 1, title: 'About JS - 01', author: 'it-incubator.eu'},
-    {id: 2, title: 'About JS - 02', author: 'it-incubator.eu'},
-    {id: 3, title: 'About JS - 03', author: 'it-incubator.eu'},
-    {id: 4, title: 'About JS - 04', author: 'it-incubator.eu'},
-    {id: 5, title: 'About JS - 05', author: 'it-incubator.eu'},
-]
+const app = express();
+const port = process.env.PORT || 3000;
 
+const parserMiddleware = bodyParser({})
+app.use(parserMiddleware)
+app.use('/products', productsRouter)
+app.use('/videos', productsRouter)
 app.get('/', (req: Request, res: Response) => {
     let helloMessage = 'Hello World!3333';
-    res.send(helloMessage)
-})
+    res.send(helloMessage);
+});
 
-app.get('/videos/', (req: Request, res: Response) => {
-    res.send(videos)
-})
-
-app.get('/videos/:videoId', (req: Request, res: Response) => {
-    const id = +req.params.videoId;
-    const video = videos.filter(v => v.id === id)
-
-    if(!video) {
-        return "rfgr"
+let requestCounter = 0;
+const requestCounterMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    requestCounter++;
+    next();
+}
+const blablaMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    // @ts-ignore
+    req.blabla = "hello";
+    next();
+}
+const authGuardMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    if(req.query.token === "123") {
+        next();
+    } else {
+        res.send(401)
     }
+}
 
-    res.send(video)
-})
+app.use(requestCounterMiddleware)
+app.use(blablaMiddleware)
+app.use(authGuardMiddleware)
+
+app.get('/users', (req: Request, res: Response) => {
+    // @ts-ignore
+    const blabla = req.blabla
+    res.send({value: blabla + "!!!!!" + requestCounter})
+});
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+    console.log(`Example app listening on port ${port}`);
+});
