@@ -1,6 +1,6 @@
 import express, {Request, Response} from 'express'
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 
 const videos = [
     {id: 1, title: 'About JS - 01', author: 'it-incubator.eu'},
