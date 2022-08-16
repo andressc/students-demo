@@ -1,26 +1,79 @@
 import {Request, Response, Router} from "express";
+import {videosRepository} from "../repositories/videos-repository";
+import {body} from "express-validator";
+import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 
-export const videosRouter = Router({})
+export const videosRouter = Router({});
 
-const videos = [
-    {id: 1, title: 'About JS - 01', author: 'it-incubator.eu'},
-    {id: 2, title: 'About JS - 02', author: 'it-incubator.eu'},
-    {id: 3, title: 'About JS - 03', author: 'it-incubator.eu'},
-    {id: 4, title: 'About JS - 04', author: 'it-incubator.eu'},
-    {id: 5, title: 'About JS - 05', author: 'it-incubator.eu'},
-];
+const titleValidation = body('title')
+    .isLength({max: 40})
+    .withMessage("maximum 40 characters")
+    .notEmpty()
+    .withMessage("must not be empty");
+
+const authorValidation = body('author')
+    .isLength({max: 20})
+    .withMessage("maximum 20 characters")
+    .notEmpty()
+    .withMessage("must not be empty");
+
 
 videosRouter.get('/', (req: Request, res: Response) => {
-    res.send(videos);
+    res.send(videosRepository.findVideos());
 });
-videosRouter.get('/:videoId', (req: Request, res: Response) => {
-    res.status(400);
-    const id = +req.params.videoId;
-    const video = videos.filter(v => v.id === id);
+videosRouter.get('/:id', (req: Request, res: Response) => {
 
-    if(video.length) {
+    const [video] = videosRepository.findVideoById(+req.params.id);
+
+    if(video) {
         res.send(video);
-    } else {
-        res.send(404);
+        return;
     }
+
+    res.send(404);
+});
+
+videosRouter.delete('/', (req: Request, res: Response) => {
+    res.send(404);
+});
+videosRouter.delete('/:id', (req: Request, res: Response) => {
+    const isDeleted = videosRepository.deleteVideo(+req.params.id)
+    if(isDeleted) {
+        res.send(204);
+        return;
+    }
+
+    res.send(404);
+});
+
+videosRouter.post('/',
+    titleValidation,
+    authorValidation,
+    inputValidationMiddleware,
+    (req: Request, res: Response) => {
+    const newVideoId = videosRepository.createVideo(req.body.title, req.body.author);
+    const [testNewVideo] = videosRepository.findVideoById(newVideoId);
+    if(testNewVideo) {
+        res.status(201).send(testNewVideo);
+        return;
+    }
+
+    res.send(400);
+});
+
+videosRouter.put('/', (req: Request, res: Response) => {
+        res.send(404);
+})
+videosRouter.put('/:id',
+    titleValidation,
+    authorValidation,
+    inputValidationMiddleware,
+    (req: Request, res: Response) => {
+    const isUpdated = videosRepository.updateVideo(+req.params.id, req.body.title, req.body.author);
+    if(isUpdated) {
+        res.send(204);
+        return;
+    }
+
+    res.send(404);
 });
