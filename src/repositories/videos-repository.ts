@@ -26,22 +26,22 @@ export const videosRepository = {
         return false;
     },
 
-    updateVideo(id: number, title: string, author: string) {
+    updateVideo(id: number, title: string, author: string = "it-incubator.eu") {
         const video = videos.find(v => v.id === id);
         if(video) {
             video.title = title;
-            video.author = author ? author : "it-incubator.eu";
+            video.author = author;
             return true;
         }
 
         return false;
     },
 
-    createVideo(title: string, author: string) {
+    createVideo(title: string, author: string = "it-incubator.eu") {
         const newVideo = {
             id: +(new Date()),
             title,
-            author: author ? author : "it-incubator.eu"
+            author
         };
         videos.push(newVideo);
         return newVideo.id;
