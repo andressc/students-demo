@@ -30,7 +30,7 @@ export const videosRepository = {
         const video = videos.find(v => v.id === id);
         if(video) {
             video.title = title;
-            video.author = author;
+            video.author = author ? author : "it-incubator.eu";
             return true;
         }
 
