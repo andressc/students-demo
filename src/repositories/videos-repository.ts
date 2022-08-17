@@ -41,7 +41,7 @@ export const videosRepository = {
         const newVideo = {
             id: +(new Date()),
             title,
-            author
+            author: author ? author : "it-incubator.eu"
         };
         videos.push(newVideo);
         return newVideo.id;
