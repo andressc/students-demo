@@ -14,8 +14,6 @@ const titleValidation = body('title')
 const authorValidation = body('author')
     .isLength({max: 20})
     .withMessage("maximum 20 characters")
-    .notEmpty()
-    .withMessage("must not be empty");
 
 
 videosRouter.get('/', (req: Request, res: Response) => {
