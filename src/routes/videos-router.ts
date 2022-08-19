@@ -5,10 +5,6 @@ import {inputValidationMiddleware} from "../middlewares/input-validation-middlew
 
 export const videosRouter = Router({});
 
-enum resolutions {
-"P144", "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"
-}
-
 const titleValidation = body('title')
     .isLength({max: 40})
     .withMessage("maximum 40 characters")
@@ -68,8 +64,6 @@ videosRouter.post('/',
     titleValidation,
     authorValidation,
     //availableResolutionsValidation,
-    minAgeRestrictionValidation,
-    canBeDownloadedValidation,
     inputValidationMiddleware,
     (req: Request, res: Response) => {
     const newVideoId = videosRepository.createVideo(
