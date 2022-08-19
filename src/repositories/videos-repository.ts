@@ -86,7 +86,7 @@ export const videosRepository = {
     createVideo(
         title: string,
         author: string,
-        canBeDownloaded: boolean = true,
+        canBeDownloaded: boolean = false,
         minAgeRestriction: number | null = null,
         availableResolutions: [],
         createdAt: string = new Date().toISOString(),
