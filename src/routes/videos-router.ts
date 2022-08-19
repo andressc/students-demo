@@ -22,8 +22,10 @@ const availableResolutionsValidation = body("availableResolutions").isArray()
     .withMessage("wrong resolution");
 
 const minAgeRestrictionValidation = body("minAgeRestriction")
-    .isLength({min: 1, max: 18})
-    .withMessage("minimum 1, maximum 18 characters");
+    .isInt({ min: 1, max: 18 })
+    .withMessage("must be number 1-18")
+    .optional({nullable: true})
+    .withMessage("not null or number");
 
 const canBeDownloadedValidation = body("canBeDownloaded")
     .isBoolean()
