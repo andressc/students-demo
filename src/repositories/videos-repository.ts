@@ -1,3 +1,5 @@
+import {addDays} from "../helpers/addDays";
+
 let videos = [
     {
         id: 1,
@@ -64,8 +66,8 @@ export const videosRepository = {
         canBeDownloaded: boolean = false,
         minAgeRestriction: number | null = null,
         availableResolutions: [],
-        createdAt: string = new Date().toISOString(),
-        publicationDate: string = new Date().toISOString(),
+        createdAt: string = addDays(new Date(), 1).toISOString(),
+        publicationDate: string = addDays(new Date(), 1).toISOString(),
     ) {
         const video = videos.find(v => v.id === id);
         if(video) {
@@ -89,8 +91,8 @@ export const videosRepository = {
         canBeDownloaded: boolean = false,
         minAgeRestriction: number | null = null,
         availableResolutions: [],
-        createdAt: string = new Date().toISOString(),
-        publicationDate: string = new Date().toISOString(),
+        createdAt: string = addDays(new Date(), 1).toISOString(),
+        publicationDate: string = addDays(new Date(), 1).toISOString(),
     ) {
         const newVideo = {
             id: +(new Date()),
