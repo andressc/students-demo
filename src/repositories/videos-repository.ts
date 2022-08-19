@@ -1,4 +1,4 @@
-const videos = [
+let videos = [
     {id: 1, title: 'About JS - 01', author: 'it-incubator.eu'},
     {id: 2, title: 'About JS - 02', author: 'it-incubator.eu'},
     {id: 3, title: 'About JS - 03', author: 'it-incubator.eu'},
@@ -24,6 +24,11 @@ export const videosRepository = {
         }
 
         return false;
+    },
+
+    deleteAllVideo() {
+        videos.length = 0
+        return true;
     },
 
     updateVideo(id: number, title: string, author: string = "it-incubator.eu") {

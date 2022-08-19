@@ -31,6 +31,7 @@ videosRouter.get('/:id', (req: Request, res: Response) => {
     res.send(404);
 });
 
+
 videosRouter.delete('/', (req: Request, res: Response) => {
     res.send(404);
 });
