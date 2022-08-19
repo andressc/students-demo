@@ -3,6 +3,17 @@ import {videosRepository} from "../repositories/videos-repository";
 import {body} from "express-validator";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 
+enum Resolutions {
+    "P144" = 1,
+    "P240",
+    "P360",
+    "P480",
+    "P720",
+    "P1080",
+    "P1440",
+    "P2160"
+}
+
 export const videosRouter = Router({});
 
 const titleValidation = body('title')
@@ -17,8 +28,18 @@ const authorValidation = body('author')
     .notEmpty()
     .withMessage("must not be empty");
 
-const availableResolutionsValidation = body("availableResolutions").isArray()
-    .isIn(["P144", "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"])
+const availableResolutionsValidation = body("availableResolutions")
+    .custom((value, { req }) => {
+
+        for(let i = 0; i < value.length; i++)
+        {
+            if(!Resolutions[value[i]]) {
+                return false
+            }
+        }
+
+        return true;
+    })
     .withMessage("wrong resolution");
 
 const minAgeRestrictionValidation = body("minAgeRestriction")
@@ -30,6 +51,10 @@ const minAgeRestrictionValidation = body("minAgeRestriction")
 const canBeDownloadedValidation = body("canBeDownloaded")
     .isBoolean()
     .withMessage("must be boolean");
+
+const publicationDateValidation = body("publicationDate")
+    .matches(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/)
+    .withMessage("date is incorrect")
 
 
 
@@ -65,7 +90,7 @@ videosRouter.delete('/:id', (req: Request, res: Response) => {
 videosRouter.post('/',
     titleValidation,
     authorValidation,
-    //availableResolutionsValidation,
+    availableResolutionsValidation,
     inputValidationMiddleware,
     (req: Request, res: Response) => {
     const newVideoId = videosRepository.createVideo(
@@ -90,9 +115,10 @@ videosRouter.put('/', (req: Request, res: Response) => {
 videosRouter.put('/:id',
     titleValidation,
     authorValidation,
-    //availableResolutionsValidation,
+    availableResolutionsValidation,
     minAgeRestrictionValidation,
     canBeDownloadedValidation,
+    publicationDateValidation,
     inputValidationMiddleware,
     (req: Request, res: Response) => {
     const isUpdated = videosRepository.updateVideo(
