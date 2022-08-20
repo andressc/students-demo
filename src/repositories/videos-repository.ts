@@ -66,12 +66,9 @@ export const videosRepository = {
         canBeDownloaded: boolean = false,
         minAgeRestriction: number | null = null,
         availableResolutions: [],
-        //createdAt: string = new Date().toISOString(),
-        //publicationDate: string = new Date().toISOString(),
+        createdAt: string = new Date().toISOString(),
+        publicationDate: string = new Date().toISOString(),
     ) {
-        const publicationDate = new Date().toISOString()
-        const createdAt = new Date().toISOString()
-
         const video = videos.find(v => v.id === id);
         if(video) {
             video.title = title;
@@ -94,9 +91,13 @@ export const videosRepository = {
         canBeDownloaded: boolean = false,
         minAgeRestriction: number | null = null,
         availableResolutions: [],
-        createdAt: string = new Date().toISOString(),
-        publicationDate: string = new Date().toISOString(),
+        //createdAt: string = new Date().toISOString(),
+        //publicationDate: string = new Date().toISOString(),
     ) {
+
+        const publicationDate = new Date().toISOString()
+        const createdAt = new Date().toISOString()
+
         const newVideo = {
             id: +(new Date()),
             title,
