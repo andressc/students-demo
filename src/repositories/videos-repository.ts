@@ -67,7 +67,7 @@ export const videosRepository = {
         minAgeRestriction: number | null = null,
         availableResolutions: [],
         createdAt: string = new Date().toISOString(),
-        publicationDate: string = addDays(new Date(createdAt), 1).toISOString(),
+        publicationDate: string = createdAt,
     ) {
         const video = videos.find(v => v.id === id);
         if(video) {
