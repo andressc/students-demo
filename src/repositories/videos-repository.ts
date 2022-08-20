@@ -76,7 +76,7 @@ export const videosRepository = {
             video.canBeDownloaded = canBeDownloaded;
             video.minAgeRestriction = minAgeRestriction;
             video.availableResolutions = availableResolutions;
-            video.createdAt = createdAt;
+            //video.createdAt = createdAt;
             video.publicationDate = publicationDate;
 
             return true;
